@@ -407,9 +407,11 @@ h2 { font-family: var(--serif); font-weight: 400; line-height: 1.1; color: var(-
 .faq summary:hover .tog { border-color: var(--pink); }
 
 .gift-bg { width: 100%; height: 100%; object-fit: cover; }
-.voucher-logo { position: absolute; left: 34.67%; top: 54.35%; width: 28%; transform: translate(-50%, -50%) rotate(-2.2deg); mix-blend-mode: multiply; }
+/* Rotated to the card in the photo: its top edge rises 8.4° to the right. */
+.voucher-logo { position: absolute; left: 34.67%; top: 54.35%; width: 28%; transform: translate(-50%, -50%) rotate(-8.4deg); mix-blend-mode: multiply; }
 .voucher-logo img { width: 100%; aspect-ratio: 168 / 50.32; object-fit: cover; }
-.voucher-text { position: absolute; left: 35.33%; top: 66.96%; transform: translate(-50%, -50%) rotate(-2.2deg); mix-blend-mode: multiply; font: 400 3.3333cqw/normal var(--serif); letter-spacing: 0.12em; color: var(--sage); opacity: 0.9; white-space: nowrap; }
+/* Sits under the logo along the card's own vertical axis (58px down the tilted card). */
+.voucher-text { position: absolute; left: 36.1%; top: 66.83%; transform: translate(-50%, -50%) rotate(-8.4deg); mix-blend-mode: multiply; font: 400 3.3333cqw/normal var(--serif); letter-spacing: 0.12em; color: var(--sage); opacity: 0.9; white-space: nowrap; }
 
 .contact-form { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; background: #fff; }
 .contact-form h3 { font-family: var(--sans); font-weight: 600; line-height: normal; color: var(--ink); white-space: nowrap; }
