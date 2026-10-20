@@ -640,8 +640,16 @@ h2 { font-family: var(--serif); font-weight: 400; line-height: 1.1; color: var(-
   .s-testi .frame { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; }
   .testi-head { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; }
   .testi-head .intro { line-height: normal; }
-  .testi-list { display: flex; flex-direction: column; gap: 14px; width: 100%; }
-  .testi { width: 100%; padding: 28px 24px 26px; background: #fff; border-radius: 28px; display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
+  /* Swipeable carousel: cards snap one at a time, the next one peeks in from the side. */
+  .testi-list { display: flex; gap: 14px; width: calc(100% + 40px); margin: 0 -20px; padding: 6px 20px 10px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: 20px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .testi-list::-webkit-scrollbar { display: none; }
+  .testi-list:focus-visible { outline-offset: -4px; }
+  .testi { flex: 0 0 84%; max-width: 360px; scroll-snap-align: start; padding: 28px 24px 26px; background: #fff; border-radius: 28px; display: flex; flex-direction: column; align-items: flex-start; gap: 16px; box-shadow: 0 14px 30px rgba(107, 122, 105, 0.10); transition: transform .35s ease, opacity .35s ease; }
+  .testi.is-dim { transform: scale(0.94); opacity: 0.55; }
+  .testi figcaption { margin-top: auto; }
+  .testi-dots { display: flex; justify-content: center; gap: 8px; width: 100%; margin-top: -6px; }
+  .testi-dots button { width: 8px; height: 8px; border-radius: 999px; background: rgba(107, 122, 105, 0.3); transition: width .3s ease, background-color .3s ease; }
+  .testi-dots button[aria-selected="true"] { width: 26px; background: var(--pink); }
   .testi .stars img { width: 14px; height: 14px; }
   .testi blockquote { font: 400 20px/1.5 var(--serif); }
   .testi figcaption { width: 100%; padding-top: 16px; border-top: 1px solid rgba(30, 30, 30, 0.12); display: flex; align-items: center; gap: 12px; }

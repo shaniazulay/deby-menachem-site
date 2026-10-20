@@ -34,7 +34,7 @@
       document.addEventListener('DOMContentLoaded', fit); window.addEventListener('load', fit);
     })();
   </script>
-  <link rel="stylesheet" href="styles.css?v=202610201832">
+  <link rel="stylesheet" href="styles.css?v=202610201840">
 </head>
 <body>
 <a class="skip" href="#main">דילוג לתוכן</a>
@@ -312,7 +312,7 @@
       <button type="button" class="arrow" data-dir="next" aria-label="להמלצה הבאה">→</button>
       <button type="button" class="arrow is-filled" data-dir="prev" aria-label="להמלצה הקודמת">←</button>
     </div>
-    <div class="testi-list">
+    <div class="testi-list" tabindex="0" aria-label="המלצות – אפשר להחליק לצדדים">
       <figure class="testi" data-pos="0">
         <div class="stars" role="img" aria-label="5 כוכבים"><img src="assets/star-lg.svg" alt=""><img src="assets/star-lg.svg" alt=""><img src="assets/star-lg.svg" alt=""><img src="assets/star-lg.svg" alt=""><img src="assets/star-lg.svg" alt=""></div>
         <blockquote>הגעתי עם כאבי גב שליוו אותי שנים. אחרי כמה טיפולים אצל דבי הרגשתי שאני מקבלת את הגוף שלי בחזרה. מקצועית, רגישה ופשוט מלאך.</blockquote>
@@ -329,6 +329,7 @@
         <figcaption><span class="av">ר</span><span><b>רונית א.</b><small>אבנים חמות</small></span></figcaption>
       </figure>
     </div>
+    <div class="testi-dots m-only" role="tablist" aria-label="בחירת המלצה"></div>
   </div>
 </section>
 
@@ -506,6 +507,6 @@
 
 <a class="float-wa m-only" href="https://wa.me/972584502900" target="_blank" rel="noopener" aria-label="שליחת הודעה בוואטסאפ"><img src="assets/icon-whatsapp.svg" alt=""></a>
 
-<script src="main.js?v=202610201832" defer></script>
+<script src="main.js?v=202610201840" defer></script>
 </body>
 </html>

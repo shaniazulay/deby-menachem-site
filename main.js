@@ -97,6 +97,40 @@
     });
   });
 
+  // ---------- Testimonials: mobile swipe carousel (dots + active card) ----------
+  var list = document.querySelector('.testi-list');
+  var dotsBox = document.querySelector('.testi-dots');
+  if (list && dotsBox && 'IntersectionObserver' in window) {
+    var dots = cards.map(function (card, i) {
+      var d = document.createElement('button');
+      d.type = 'button';
+      d.setAttribute('role', 'tab');
+      d.setAttribute('aria-label', 'המלצה ' + (i + 1));
+      d.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+      d.addEventListener('click', function () {
+        list.scrollTo({ left: card.offsetLeft - list.offsetLeft - (list.clientWidth - card.offsetWidth) / 2, behavior: 'smooth' });
+      });
+      dotsBox.appendChild(d);
+      return d;
+    });
+    var setActive = function (idx) {
+      cards.forEach(function (c, i) { c.classList.toggle('is-dim', i !== idx); });
+      dots.forEach(function (d, i) { d.setAttribute('aria-selected', String(i === idx)); });
+    };
+    var mobileQuery = window.matchMedia('(max-width: 1099.98px)');
+    var io = new IntersectionObserver(function (entries) {
+      if (!mobileQuery.matches) return;
+      entries.forEach(function (e) { if (e.isIntersecting) setActive(cards.indexOf(e.target)); });
+    }, { root: list, threshold: 0.6 });
+    cards.forEach(function (c) { io.observe(c); });
+    var syncMode = function () {
+      if (mobileQuery.matches) setActive(0);
+      else cards.forEach(function (c) { c.classList.remove('is-dim'); });
+    };
+    (mobileQuery.addEventListener ? mobileQuery.addEventListener('change', syncMode) : mobileQuery.addListener(syncMode));
+    syncMode();
+  }
+
   // ---------- Contact form → WhatsApp message (no backend needed) ----------
   var form = document.getElementById('contact-form');
   if (form) {
