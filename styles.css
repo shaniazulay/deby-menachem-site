@@ -487,17 +487,18 @@ h2 { font-family: var(--serif); font-weight: 400; line-height: 1.1; color: var(-
   .nav-rule { display: none; }
 
   .s-hero { overflow: hidden; }
-  .hero-visual { position: relative; height: 771px; overflow: hidden; }
+  /* The whole hero – header 73 + photo + info strip 54 + words strip 76 – fits the phone screen. */
+  .hero-visual { position: relative; height: 771px; height: clamp(300px, calc(100vh - 203px), 771px); height: clamp(300px, calc(100svh - 203px), 771px); overflow: hidden; }
   .hero-img { position: absolute; inset: 0; overflow: hidden; }
-  .hero-img img { position: absolute; left: 1.61%; top: 0.07%; width: 333.33%; height: 100%; }
+  .hero-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 2% center; }
   .hero-shade { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(20, 23, 20, 0) 0%, rgba(20, 23, 20, 0.05) 45%, rgba(20, 23, 20, 0.72) 100%); }
-  .hero-wave { position: absolute; left: -23.5px; top: -2.47px; width: 173.05px; height: 776px; }
-  .vlabel { position: absolute; left: -96px; top: 317.32px; width: 232px; height: 13px; transform: rotate(-90deg); display: flex; align-items: center; gap: 16px; direction: ltr; }
+  .hero-wave { position: absolute; left: -23.5px; top: -2.47px; width: 173.05px; height: calc(100% + 5px); }
+  .vlabel { position: absolute; left: -96px; top: calc(42% - 6.5px); width: 232px; height: 13px; transform: rotate(-90deg); display: flex; align-items: center; gap: 16px; direction: ltr; }
   .vlabel > span { direction: rtl; font: 600 10px/13px var(--sans); letter-spacing: 0.18em; color: rgba(255, 255, 255, 0.85); white-space: pre; }
   .vlabel i { width: 48px; height: 1px; background: rgba(255, 255, 255, 0.6); flex: none; }
   .hero-badge { width: 115.92px; height: 115.92px; right: -1.92px; top: 50px; }
 
-  .hero-text { position: absolute; right: 20px; top: 560.6px; width: 300px; display: flex; flex-direction: column; align-items: flex-start; gap: 14px; z-index: 2; }
+  .hero-text { position: absolute; right: 20px; bottom: 92px; width: 300px; display: flex; flex-direction: column; align-items: flex-start; gap: 14px; z-index: 2; }
   .hero-text .overline { gap: 10px; font-size: 13px; color: #fff; }
   .hero-text .overline i { width: 28px; }
   .hero-text h1 { width: 300px; font: 400 44px/1.04 var(--serif); color: #fff; }
@@ -705,7 +706,7 @@ h2 { font-family: var(--serif); font-weight: 400; line-height: 1.1; color: var(-
   .f-legal p { font: 400 13px/17px var(--sans); color: var(--muted); white-space: pre-wrap; }
   .to-top { position: absolute; right: 20px; top: -22px; z-index: 2; width: 44px; height: 44px; border-radius: 50%; background: #fff; border: 1px solid rgba(30, 30, 30, 0.12); display: flex; align-items: center; justify-content: center; font: 400 18px/24px var(--sans); color: var(--ink); box-shadow: 0 6px 16px rgba(30, 30, 30, 0.06); }
 
-  .float-wa { position: fixed; left: 20px; bottom: 24px; z-index: 50; width: 50px; height: 50px; border-radius: 50%; background: var(--sage); display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 24px rgba(30, 30, 30, 0.18); }
+  .float-wa { position: fixed; left: 20px; bottom: 24px; z-index: 50; width: 50px; height: 50px; border-radius: 50%; background: var(--sage); border: 2px solid #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 1px rgba(107, 122, 105, 0.35), 0 10px 26px rgba(30, 30, 30, 0.35); }
   .float-wa img { width: 22.1px; height: 22.1px; }
 }
 
@@ -734,4 +735,17 @@ h2 { font-family: var(--serif); font-weight: 400; line-height: 1.1; color: var(-
   html { scroll-behavior: auto; }
   .marquee-track { animation: none; transform: translateX(-33.3333%); }
   *, *::before, *::after { transition: none !important; }
+}
+
+/* Short phone screens: compact hero so header + photo + strips still fit one screen. */
+@media (max-width: 1099.98px) and (max-height: 720px) {
+  .hero-badge { width: 92px; height: 92px; top: 14px; }
+  .hero-text { bottom: 74px; gap: 10px; }
+  .hero-text h1 { font-size: 36px; }
+  .hero-text .lead { font-size: 14.5px; line-height: 1.45; }
+  .hero-buttons .btn { font-size: 15px; }
+}
+@media (max-width: 1099.98px) and (max-height: 560px) {
+  .hero-text .lead { display: none; }
+  .hero-text h1 { font-size: 32px; }
 }
