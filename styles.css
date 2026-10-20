@@ -110,6 +110,8 @@ h2 { font-family: var(--serif); font-weight: 400; line-height: 1.1; color: var(-
   .s-hero { zoom: var(--hk, 1); }
   .s-hero .frame { height: 720px; width: 1440px; margin: 0 0 0 auto; }
   .s-hero { overflow: hidden; }
+  /* Every section below is fitted to the screen height by main.js (fitSections). */
+  main > section:not(.s-marquee), .s-footer { overflow: hidden; }
   .logo { position: absolute; right: 35px; top: 19px; z-index: 2; }
   .logo img { width: 207px; height: 62px; object-fit: cover; }
   .nav { position: absolute; right: 305px; top: 27px; display: flex; gap: 22px; z-index: 2; }
@@ -143,7 +145,7 @@ h2 { font-family: var(--serif); font-weight: 400; line-height: 1.1; color: var(-
   .hero-buttons { right: 71px; top: 471px; display: flex; align-items: center; gap: 16px; }
   .trust { right: 71px; top: 557.4px; display: flex; align-items: center; gap: 20px; }
   .avatars { position: relative; width: 88px; height: 36px; flex: none; }
-  .av { position: absolute; top: 0; width: 36px; height: 36px; border-radius: 50%; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; font: 600 16px/normal var(--sans); color: #fff; }
+  .avatars .av { position: absolute; top: 0; width: 36px; height: 36px; border-radius: 50%; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; font: 600 16px/normal var(--sans); color: #fff; }
   .avatars .av1 { left: 0; background: var(--sage-dark); z-index: 1; }
   .avatars .av2 { left: 26px; background: var(--pink); z-index: 2; }
   .avatars .av3 { left: 52px; background: var(--sage); z-index: 3; }
@@ -189,7 +191,7 @@ h2 { font-family: var(--serif); font-weight: 400; line-height: 1.1; color: var(-
 
   /* ---------- 03b · Why me ---------- */
   .s-why .frame { height: 914px; }
-  .s-why .frame::before { content: ''; position: absolute; left: 120px; top: 0; width: 1200px; height: 1px; background: var(--rule); }
+  .s-why::before { content: ''; position: absolute; left: calc(50% - 600px); top: 0; width: 1200px; height: 1px; background: var(--rule); z-index: 1; }
   .sec-head.center { position: absolute; left: 360px; top: 130px; width: 720px; display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; }
   .sec-head h2 { font-size: 56px; white-space: nowrap; }
   .sec-head .intro { font: 400 21px/1.5 var(--sans); }
@@ -723,5 +725,5 @@ h2 { font-family: var(--serif); font-weight: 400; line-height: 1.1; color: var(-
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .marquee-track { animation: none; transform: translateX(-33.3333%); }
-  *, *::before, *::after { transition-duration: 0.01ms !important; }
+  *, *::before, *::after { transition: none !important; }
 }

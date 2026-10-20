@@ -3,6 +3,61 @@
 
   var WA_NUMBER = '972584502900';
 
+  // ---------- Desktop: every section fits one screen ----------
+  // Each section's real content is measured, the extra top/bottom whitespace is trimmed
+  // (keeping a margin and the wave shapes), and if it is still taller than the screen
+  // the content is scaled down as a unit (CSS transform), centred – same composition.
+  // Backgrounds and waves stay full width; the section height follows the scaled content.
+  var desktopQuery = window.matchMedia('(min-width: 1100px)');
+  var PAD = 56;      // breathing room kept above/below the content (design px)
+  var MIN_K = 0.55;  // never shrink a section below 55%
+
+  function fitSections() {
+    var sections = document.querySelectorAll('main > section:not(.s-marquee), .s-footer');
+    sections.forEach(function (sec) {
+      var frame = sec.querySelector('.frame');
+      sec.style.height = ''; frame.style.transform = ''; frame.style.transformOrigin = '';
+      if (!desktopQuery.matches) return;
+
+      var fr = frame.getBoundingClientRect();
+      var scale = fr.height / frame.offsetHeight || 1;   // page zoom
+      var top = Infinity, bottom = -Infinity;
+      (function walk(parent) {
+        for (var i = 0; i < parent.children.length; i++) {
+          var el = parent.children[i];
+          var r = el.getBoundingClientRect();
+          if (r.width && r.height) {
+            top = Math.min(top, (r.top - fr.top) / scale);
+            bottom = Math.max(bottom, (r.bottom - fr.top) / scale);
+          }
+          // Content cropped by an overflow:hidden box does not count beyond that box.
+          if (getComputedStyle(el).overflow === 'visible') walk(el);
+        }
+      })(frame);
+      if (!isFinite(top)) return;
+
+      var h = frame.offsetHeight;
+      var waveTop = sec.querySelector('.wave-top:not(.m-only)');
+      var waveBottom = sec.querySelector('.wave-bottom:not(.m-only)');
+      var padTop = Math.max(PAD, waveTop ? waveTop.offsetHeight + 24 : 0);
+      var padBottom = Math.max(PAD, waveBottom ? waveBottom.offsetHeight + 24 : 0);
+      var trimTop = Math.max(0, top - padTop);
+      var trimBottom = Math.max(0, h - bottom - padBottom);
+      var contentH = h - trimTop - trimBottom;                       // design px
+      var k = Math.max(MIN_K, Math.min(1, window.innerHeight / (contentH * scale)));
+
+      frame.style.transformOrigin = '50% 0';
+      frame.style.transform = 'scale(' + k + ') translateY(' + (-trimTop) + 'px)';
+      sec.style.height = (contentH * k) + 'px';
+    });
+  }
+  var fitTimer;
+  function scheduleFit() { clearTimeout(fitTimer); fitTimer = setTimeout(fitSections, 60); }
+  window.addEventListener('resize', scheduleFit);
+  window.addEventListener('load', fitSections);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitSections);
+  fitSections();
+
   // ---------- Mobile menu ----------
   var burger = document.querySelector('.hamburger');
   var nav = document.getElementById('site-nav');
