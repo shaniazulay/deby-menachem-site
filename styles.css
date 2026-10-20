@@ -155,7 +155,7 @@ h2 { font-family: var(--serif); font-weight: 400; line-height: 1.1; color: var(-
   .info-strip { position: absolute; right: 71px; top: 652px; width: 539px; height: 52px; border-top: 1px solid var(--rule); }
   .facts { position: absolute; right: 0; top: 19px; display: flex; gap: 36px; }
   .facts li { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
-  .facts b { font: 600 13px/17px var(--sans); letter-spacing: 0.06em; color: var(--pink); }
+  .facts i { width: 6px; height: 6px; border-radius: 50%; background: var(--pink); flex: none; }
   .facts span { font: 400 15px/20px var(--sans); color: var(--muted); }
 
   /* ---------- 02 · Marquee ---------- */
@@ -509,7 +509,7 @@ h2 { font-family: var(--serif); font-weight: 400; line-height: 1.1; color: var(-
   .info-strip { padding: 18px 20px; }
   .facts { display: flex; gap: 18px; justify-content: flex-start; }
   .facts li { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
-  .facts b { font: 600 12px/16px var(--sans); letter-spacing: 0.06em; color: var(--pink); }
+  .facts i { width: 5px; height: 5px; border-radius: 50%; background: var(--pink); flex: none; }
   .facts span { font: 400 14px/18px var(--sans); color: var(--muted); }
 
   /* ---------- Marquee ---------- */
