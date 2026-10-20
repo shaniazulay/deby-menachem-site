@@ -3,14 +3,15 @@
 
   var WA_NUMBER = '972584502900';
 
-  // ---------- Desktop: every section fits one screen ----------
+  // ---------- Desktop: compact sections, always full width ----------
   // Each section's real content is measured, the extra top/bottom whitespace is trimmed
-  // (keeping a margin and the wave shapes), and if it is still taller than the screen
-  // the content is scaled down as a unit (CSS transform), centred – same composition.
-  // Backgrounds and waves stay full width; the section height follows the scaled content.
+  // (keeping a margin and the wave shapes). Sections are not scaled down to the screen
+  // height any more – scaling a section shrinks its width and left empty side margins.
+  // Set FIT_HEIGHT = true to bring back "every section fits one screen" scaling.
   var desktopQuery = window.matchMedia('(min-width: 1100px)');
   var PAD = 56;      // breathing room kept above/below the content (design px)
-  var MIN_K = 0.55;  // never show a section below 55% of the design size
+  var MIN_K = 0.55;  // (FIT_HEIGHT only) never show a section below 55% of the design size
+  var FIT_HEIGHT = false;
 
   function fitSections() {
     var sections = document.querySelectorAll('main > section:not(.s-marquee), .s-footer');
@@ -45,7 +46,7 @@
       var trimBottom = Math.max(0, h - bottom - padBottom);
       var contentH = h - trimTop - trimBottom;                       // design px
       // MIN_K limits the on-screen size (relative to the design), not the extra factor.
-      var k = Math.max(MIN_K / scale, Math.min(1, window.innerHeight / (contentH * scale)));
+      var k = FIT_HEIGHT ? Math.max(MIN_K / scale, Math.min(1, window.innerHeight / (contentH * scale))) : 1;
 
       frame.style.transformOrigin = '50% 0';
       frame.style.transform = 'scale(' + k + ') translateY(' + (-trimTop) + 'px)';
