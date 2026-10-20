@@ -106,9 +106,12 @@ h2 { font-family: var(--serif); font-weight: 400; line-height: 1.1; color: var(-
   .frame { position: relative; width: 1440px; margin: 0 auto; }
 
   /* ---------- 01 · Hero ---------- */
-  .s-hero .frame { height: 720px; }
+  /* The hero also scales by viewport height (--hk) so it always fits one screen;
+     its canvas widens instead, keeping the photo pinned left and the text pinned right. */
+  .s-hero { zoom: var(--hk, 1); }
+  .s-hero .frame { height: 720px; width: 100%; max-width: calc(1440px / var(--hk, 1)); }
   .s-hero { overflow: hidden; }
-  .logo { position: absolute; left: 1198px; top: 19px; z-index: 2; }
+  .logo { position: absolute; right: 35px; top: 19px; z-index: 2; }
   .logo img { width: 207px; height: 62px; object-fit: cover; }
   .nav { position: absolute; right: 305px; top: 27px; display: flex; gap: 22px; z-index: 2; }
   .nav a { font: 400 18px/24px var(--sans); color: #000; white-space: nowrap; transition: color .2s; }
@@ -116,7 +119,7 @@ h2 { font-family: var(--serif); font-weight: 400; line-height: 1.1; color: var(-
   .header-actions { position: absolute; right: 639px; top: 16.7px; z-index: 2; }
   .header-cta { display: inline-flex; border: 1.3px solid var(--pink); border-radius: 999px; padding: 9px 20px; font: 600 18px/normal var(--sans); color: var(--pink); transition: background-color .2s, color .2s; }
   .header-cta:hover { background: var(--pink); color: #fff; }
-  .nav-rule { position: absolute; left: 729px; top: 104px; width: 676px; height: 1px; background: var(--rule); }
+  .nav-rule { position: absolute; right: 35px; top: 104px; width: 676px; height: 1px; background: var(--rule); }
 
   .hero-visual { position: absolute; inset: 0; }
   .hero-img { position: absolute; left: 141px; top: 5px; width: 506px; height: 714px; border-radius: 0 40px 40px 0; overflow: hidden; }
@@ -147,7 +150,7 @@ h2 { font-family: var(--serif); font-weight: 400; line-height: 1.1; color: var(-
   .trust-text { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
   .trust-text p { font: 400 16px/21px var(--sans); color: var(--muted); }
 
-  .info-strip { position: absolute; left: 830px; top: 652px; width: 539px; height: 52px; border-top: 1px solid var(--rule); }
+  .info-strip { position: absolute; right: 71px; top: 652px; width: 539px; height: 52px; border-top: 1px solid var(--rule); }
   .facts { position: absolute; right: 0; top: 19px; display: flex; gap: 36px; }
   .facts li { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
   .facts b { font: 600 13px/17px var(--sans); letter-spacing: 0.06em; color: var(--pink); }

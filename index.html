@@ -21,7 +21,12 @@
     // so it keeps the exact Figma proportions instead of reflowing.
     (function () {
       var r = document.documentElement;
-      function fit() { r.style.setProperty('--z', Math.min(1, window.innerWidth / 1440)); }
+      function fit() {
+        var z = Math.min(1, window.innerWidth / 1440);
+        r.style.setProperty('--z', z);
+        // Hero height factor: fit the 720px hero inside the visible screen height.
+        r.style.setProperty('--hk', Math.max(0.6, Math.min(1, window.innerHeight / (720 * z))));
+      }
       fit(); window.addEventListener('resize', fit);
     })();
   </script>
