@@ -17,17 +17,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&family=Bellefair&display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="assets/img/hero.webp">
   <script>
-    // Between 1100px and 1440px the desktop composition is scaled as one unit,
+    // On desktop the 1440px composition is scaled to the screen width as one unit,
     // so it keeps the exact Figma proportions instead of reflowing.
     (function () {
       var r = document.documentElement;
       function fit() {
-        var z = Math.min(1, window.innerWidth / 1440);
+        var z = Math.min(1.8, r.clientWidth / 1440);
         r.style.setProperty('--z', z);
         // Hero height factor: hero (720px) + the words strip below it (128px) fit in the first screen.
         r.style.setProperty('--hk', Math.max(0.5, Math.min(1, (window.innerHeight - 128 * z) / (720 * z))));
       }
+      // Re-measure once the scrollbar exists (clientWidth excludes it).
       fit(); window.addEventListener('resize', fit);
+      document.addEventListener('DOMContentLoaded', fit); window.addEventListener('load', fit);
     })();
   </script>
   <link rel="stylesheet" href="styles.css">

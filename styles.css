@@ -102,7 +102,6 @@ h2 { font-family: var(--serif); font-weight: 400; line-height: 1.1; color: var(-
 @media (min-width: 1100px) {
   .m-only { display: none !important; }
 
-  .page { width: 100%; }
   .frame { position: relative; width: 1440px; margin: 0 auto; }
 
   /* ---------- 01 · Hero ---------- */
@@ -378,9 +377,9 @@ h2 { font-family: var(--serif); font-weight: 400; line-height: 1.1; color: var(-
   .f-legal p { font: 400 16px/21px var(--sans); color: var(--muted); white-space: pre; }
 }
 
-/* Between 1100 and 1440 the desktop page is the 1440px composition, scaled. */
-@media (min-width: 1100px) and (max-width: 1439.98px) {
-  .page { width: 1440px; zoom: var(--z, 1); }
+/* Desktop (≥1100px): the 1440px composition scaled to the screen width (up to 1.8×). */
+@media (min-width: 1100px) {
+  .page { width: 1440px; margin: 0 auto; zoom: var(--z, 1); }
 }
 
 /* ---------- pieces shared by both layouts ---------- */
