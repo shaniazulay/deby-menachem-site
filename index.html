@@ -31,12 +31,44 @@
       }
       // Re-measure once the scrollbar exists (clientWidth excludes it).
       fit(); window.addEventListener('resize', fit);
+
+      var done = false;
+      // Preloader: shown for at least 3.4s (so the logo animation completes), closed when the page has loaded.
+      // "deby:ready" fires as the curtain lifts, so the hero entrance plays right behind it.
+      if (!/[?&]static/.test(location.search)) r.classList.add('is-loading'); else done = true;
+      var t0 = Date.now();
+      function closeLoader() {
+        if (done) return; done = true;
+        r.classList.add('loader-out');
+        window.dispatchEvent(new Event('deby:ready'));
+        setTimeout(function () {
+          r.classList.remove('is-loading', 'loader-out');
+          var l = document.getElementById('loader'); if (l) l.remove();
+        }, 1500);
+      }
+      window.addEventListener('load', function () { setTimeout(closeLoader, Math.max(0, 3400 - (Date.now() - t0))); });
+      setTimeout(closeLoader, 8000); // safety net on very slow networks
       document.addEventListener('DOMContentLoaded', fit); window.addEventListener('load', fit);
     })();
   </script>
-  <link rel="stylesheet" href="styles.css?v=202610202136">
+  <link rel="stylesheet" href="styles.css?v=202610202155">
 </head>
 <body>
+<!-- Luxury preloader (pure CSS animation, closed by the inline script in <head> once the page has loaded) -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader-inner">
+    <div class="loader-mark">
+      <svg class="loader-ring" viewBox="0 0 120 120"><circle cx="60" cy="60" r="57" pathLength="1"/></svg>
+      <svg class="loader-lotus" viewBox="0 0 80 80">
+        <path class="petal-c" d="M53.96 30.52C53.24 19.36 48.72 8.48 40.24 0C31.68 8.56 26.96 19.44 26.04 30.52C31.16 33.24 35.88 36.76 40 41.04C44.12 36.8 48.84 33.28 53.96 30.52Z"/>
+        <path class="petal-s" d="M40 53.8C31.4 40.68 16.72 32 0 32C0 53.28 13.44 71.28 32.12 77.96C34.64 78.88 37.28 79.56 40 80C42.72 79.52 45.32 78.84 47.88 77.96C66.56 71.28 80 53.28 80 32C63.28 32 48.6 40.68 40 53.8Z"/>
+      </svg>
+    </div>
+    <div class="loader-logo"><img src="assets/img/logo.webp" width="207" height="62" alt=""><i class="loader-shine"></i></div>
+    <span class="loader-line"></span>
+  </div>
+</div>
+<noscript><style>.loader { display: none !important; }</style></noscript>
 <a class="skip" href="#main">דילוג לתוכן</a>
 
 <div id="smooth-wrapper">
@@ -519,7 +551,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/DrawSVGPlugin.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollSmoother.min.js" defer></script>
-<script src="main.js?v=202610202136" defer></script>
-<script src="animations.js?v=202610202136" defer></script>
+<script src="main.js?v=202610202155" defer></script>
+<script src="animations.js?v=202610202155" defer></script>
 </body>
 </html>

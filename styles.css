@@ -893,3 +893,52 @@ html.has-smoother { scroll-behavior: auto; }
 .gsap-on .item:nth-child(4) .w-icon::after { animation-delay: 1.8s; }
 .gsap-on .item:nth-child(5) .w-icon::after { animation-delay: 2.4s; }
 .gsap-on .item:nth-child(6) .w-icon::after { animation-delay: 3s; }
+
+/* =========================================================
+   PRELOADER – sage curtain, white lotus + logo
+   ========================================================= */
+.loader { display: none; }
+html.is-loading, html.is-loading body { overflow: hidden; }
+html.is-loading .loader {
+  position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(120% 90% at 50% 40%, #74846f 0%, var(--sage) 55%, #5f6e5d 100%);
+  clip-path: inset(0 0 0 0 round 0 0 0 0);
+}
+.loader-inner { display: flex; flex-direction: column; align-items: center; gap: 28px; }
+
+/* Lotus inside a self-drawing ring */
+.loader-mark { position: relative; width: 116px; height: 116px; display: grid; place-items: center; }
+.loader-ring { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+.loader-ring circle { fill: none; stroke: rgba(255, 255, 255, 0.55); stroke-width: 1; stroke-dasharray: 1; stroke-dashoffset: 1; animation: ld-ring 1.7s cubic-bezier(.65, 0, .35, 1) .15s forwards; }
+.loader-lotus { width: 52px; height: 52px; overflow: visible; filter: drop-shadow(0 0 0 rgba(255, 255, 255, 0)); animation: ld-glow 3.2s ease-in-out 2.2s infinite; }
+.loader-lotus path { fill: #fff; transform-box: fill-box; }
+.loader-lotus .petal-c { transform-origin: 50% 100%; opacity: 0; transform: translateY(14px) scale(.6); animation: ld-petal-c 1s cubic-bezier(.2, .8, .2, 1) .45s forwards; }
+.loader-lotus .petal-s { transform-origin: 50% 70%; opacity: 0; transform: scaleX(.2) scaleY(.6); animation: ld-petal-s 1.1s cubic-bezier(.2, .8, .2, 1.15) .8s forwards; }
+
+/* Logo: white, wiped in from the right (RTL), blur → sharp, then a soft shine passes */
+.loader-logo { position: relative; width: 260px; aspect-ratio: 207 / 62; }
+.loader-logo img { display: block; width: 100%; height: 100%; object-fit: cover; filter: brightness(0) invert(1) blur(6px); clip-path: inset(0 0 0 100%); opacity: 0; animation: ld-logo 1.3s cubic-bezier(.65, 0, .35, 1) 1.05s forwards; }
+.loader-shine { position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.95) 50%, transparent 65%) no-repeat;
+  background-size: 250% 100%; background-position: 130% 0;
+  -webkit-mask: url(assets/img/logo.webp) center / 100% 100% no-repeat; mask: url(assets/img/logo.webp) center / 100% 100% no-repeat;
+  mix-blend-mode: overlay; opacity: .9; animation: ld-shine 1.4s ease-in-out 2.15s forwards; }
+.loader-line { display: block; width: 120px; height: 1px; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.75), transparent); transform: scaleX(0); animation: ld-line 1.2s cubic-bezier(.65, 0, .35, 1) 1.7s forwards; }
+
+/* Exit: content floats up, the curtain lifts with a soft curved edge */
+html.loader-out .loader-inner { opacity: 0; transform: translateY(-24px); transition: opacity .5s ease, transform .6s cubic-bezier(.65, 0, .35, 1); }
+html.loader-out .loader { clip-path: inset(0 0 100% 0 round 0 0 50% 50%); transition: clip-path 1.1s cubic-bezier(.76, 0, .24, 1) .3s; }
+
+@keyframes ld-ring { to { stroke-dashoffset: 0; } }
+@keyframes ld-petal-c { to { opacity: 1; transform: none; } }
+@keyframes ld-petal-s { to { opacity: 1; transform: none; } }
+@keyframes ld-logo { to { opacity: 1; clip-path: inset(0 0 0 0); filter: brightness(0) invert(1) blur(0); } }
+@keyframes ld-shine { to { background-position: -130% 0; } }
+@keyframes ld-line { to { transform: scaleX(1); } }
+@keyframes ld-glow { 0%, 100% { filter: drop-shadow(0 0 0 rgba(255, 255, 255, 0)); } 50% { filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.55)); } }
+
+@media (max-width: 767px) {
+  .loader-logo { width: 200px; }
+  .loader-mark { width: 96px; height: 96px; }
+  .loader-lotus { width: 44px; height: 44px; }
+}

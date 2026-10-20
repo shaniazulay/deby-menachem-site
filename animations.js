@@ -84,6 +84,12 @@
     '</nav><a class="sh-cta" href="#contact">שנדבר?</a>';
   document.body.appendChild(sticky);
 
+  // Runs fn when the preloader curtain starts lifting (or right away if there is no preloader).
+  function whenReady(fn) {
+    if (root.classList.contains('is-loading') && !root.classList.contains('loader-out')) window.addEventListener('deby:ready', fn, { once: true });
+    else fn();
+  }
+
   // Calls fn(true/false) when the page is scrolled past `px`; returns a cleanup function.
   function onScrollPast(px, fn) {
     var state = null;
@@ -180,7 +186,8 @@
 
     if (c.isDesktop) {
       // ----- Hero & header -----
-      var heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      var heroTl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+      whenReady(function () { heroTl.play(); });
       heroTl
         .from(mark(['.logo', '.nav', '.header-actions', '.nav-rule']), { y: -20, opacity: 0, duration: 0.8, stagger: 0.06, clearProps: 'transform,opacity' }, 0)
         .fromTo(heroImg, { scale: 1.18 }, { scale: 1.12, duration: 1.8, ease: 'power2.out' }, 0) // 1.06 → 1 on top of the parallax head-room
@@ -287,9 +294,11 @@
       cleanups.push(onScrollPast(10, function (on) { head.classList.toggle('is-scrolled', on); }));
 
       // ----- Hero: simple fade, quick text entrance, slow badge spin (no float, no parallax) -----
-      gsap.from(heroImg, { opacity: 0, duration: 1, ease: 'power1.out', clearProps: 'opacity' });
-      gsap.from(mark(['.hero-text .overline', '.hero-text .h1-line', '.hero-text .lead', '.hero-buttons', '.info-strip']),
-        { y: 18, opacity: 0, duration: 0.7, stagger: 0.08, ease: 'power3.out', delay: 0.15, clearProps: 'transform,opacity' });
+      var mHero = gsap.timeline({ paused: true });
+      whenReady(function () { mHero.play(); });
+      mHero.from(heroImg, { opacity: 0, duration: 1, ease: 'power1.out', clearProps: 'opacity' }, 0);
+      mHero.from(mark(['.hero-text .overline', '.hero-text .h1-line', '.hero-text .lead', '.hero-buttons', '.info-strip']),
+        { y: 18, opacity: 0, duration: 0.7, stagger: 0.08, ease: 'power3.out', clearProps: 'transform,opacity' }, 0.15);
       gsap.to('.hero-badge.m-only .badge-ring', { rotate: 360, duration: 40, repeat: -1, ease: 'none', transformOrigin: '50% 50%' });
 
       // ----- Sections: clearly visible but light entrance reveals (transform / opacity / clip only) -----
