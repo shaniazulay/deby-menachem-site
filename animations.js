@@ -13,6 +13,7 @@
   'use strict';
   var root = document.documentElement;
   if (!window.gsap || !window.ScrollTrigger) return; // site works fully without the motion layer
+  if (/[?&]static/.test(location.search)) return; // ?static – motion off (used by the layout/pixel tests)
 
   var gsap = window.gsap, ScrollTrigger = window.ScrollTrigger;
   gsap.registerPlugin(ScrollTrigger);
@@ -106,10 +107,18 @@
     var cleanups = [];
     var heroImg = $('.hero-img img');
 
-    // ===== Reduced motion: no movement at all – just a gentle hero fade =====
+    // ===== Reduced motion: no movement at all – only soft opacity fade-ins =====
     if (c.reduce) {
-      gsap.from([heroImg, '.hero-text'], { opacity: 0, duration: 0.6, ease: 'none', clearProps: 'opacity' });
-      return;
+      gsap.from([heroImg, '.hero-text', '.info-strip', '.hero-badge'], { opacity: 0, duration: 0.9, stagger: 0.12, ease: 'power1.out', clearProps: 'opacity' });
+      var fade = { y: 0, x: 0, duration: 0.9, stagger: 0.08, ease: 'power1.out' };
+      ['.about-text > *', '.about-squiggle', '.s-why .sec-head > *', '.reason', '.s-services .sec-head > *', '.card',
+        '.process-aside > *', '.step', '.philo-img', '.philo-quote > *', '.whom-head > *', '.whom-grid .item',
+        '.testi-head > *', '.testi-list', '.gift-panel', '.faq-head > *', '.accordion .faq', '.contact-card', '.f-cols'
+      ].forEach(function (sel) { var el = $(sel); if (el) reveal(sel, fade, el.parentElement, 'top 88%'); });
+      // Header states are UI, not motion – keep them (the CSS transitions are already disabled here).
+      if (c.isDesktop) cleanups.push(onScrollPast(140, function (on) { sticky.classList.toggle('is-visible', on); }));
+      else { var hd = $('.site-header'); cleanups.push(onScrollPast(10, function (on) { hd.classList.toggle('is-scrolled', on); })); }
+      return function () { cleanups.forEach(function (fn) { fn(); }); };
     }
 
     // ===== Marquee ticker – seamless loop with transforms only =====
