@@ -10,7 +10,7 @@
   // Backgrounds and waves stay full width; the section height follows the scaled content.
   var desktopQuery = window.matchMedia('(min-width: 1100px)');
   var PAD = 56;      // breathing room kept above/below the content (design px)
-  var MIN_K = 0.55;  // never shrink a section below 55%
+  var MIN_K = 0.55;  // never show a section below 55% of the design size
 
   function fitSections() {
     var sections = document.querySelectorAll('main > section:not(.s-marquee), .s-footer');
@@ -44,7 +44,8 @@
       var trimTop = Math.max(0, top - padTop);
       var trimBottom = Math.max(0, h - bottom - padBottom);
       var contentH = h - trimTop - trimBottom;                       // design px
-      var k = Math.max(MIN_K, Math.min(1, window.innerHeight / (contentH * scale)));
+      // MIN_K limits the on-screen size (relative to the design), not the extra factor.
+      var k = Math.max(MIN_K / scale, Math.min(1, window.innerHeight / (contentH * scale)));
 
       frame.style.transformOrigin = '50% 0';
       frame.style.transform = 'scale(' + k + ') translateY(' + (-trimTop) + 'px)';
