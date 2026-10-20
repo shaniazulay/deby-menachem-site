@@ -128,6 +128,17 @@
     var track = $('.marquee-track');
     var ticker = gsap.fromTo(track, { xPercent: -33.3333 }, { xPercent: 0, duration: c.isDesktop ? 46 : 26, ease: 'none', repeat: -1 });
 
+    // Stats counters: numeric values count up from 0 when the stats enter the screen ('LFA' just fades in)
+    $$('.stat dt').forEach(function (dt) {
+      var m = dt.textContent.trim().match(/^(d+)(%?)$/);
+      if (!m) return;
+      var target = +m[1], suffix = m[2], o = { v: 0 };
+      dt.textContent = '0' + suffix;
+      gsap.to(o, { v: target, duration: target > 10 ? 1.8 : 1.1, ease: 'power2.out', scrollTrigger: { trigger: '.stats', start: 'top 90%', once: true },
+        onUpdate: function () { dt.textContent = Math.round(o.v) + suffix; } });
+      cleanups.push(function () { dt.textContent = target + suffix; });
+    });
+
     if (c.isDesktop) {
       // ----- Hero & header -----
       var heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
@@ -234,19 +245,41 @@
         { y: 18, opacity: 0, duration: 0.7, stagger: 0.08, ease: 'power3.out', delay: 0.15, clearProps: 'transform,opacity' });
       gsap.to('.hero-badge.m-only .badge-ring', { rotate: 360, duration: 40, repeat: -1, ease: 'none', transformOrigin: '50% 50%' });
 
-      // ----- Sections: smooth, fast entrance reveals -----
-      var quick = { y: 24, duration: 0.7, stagger: 0.08 };
-      reveal('.about-text > :not(.mosaic)', quick, '.about-text', 'top 85%');
-      reveal('.m-room', { y: 0, x: -30, duration: 0.8 }, '.mosaic', 'top 85%');
-      reveal(['.m-oils', '.m-stones'], { y: 0, x: 30, duration: 0.8, stagger: 0.1 }, '.mosaic', 'top 85%');
-      reveal('.stat, .stat-div', { y: 16, duration: 0.6, stagger: 0.1 }, '.stats', 'top 90%');
-      ['.s-why .sec-head > *', '.s-services .sec-head > *', '.process-aside > *', '.whom-head > *', '.testi-head > *',
-        '.gift-text > *', '.contact-info > *'].forEach(function (s) { reveal(s, quick, $(s) && $(s).parentElement, 'top 85%'); });
-      $$('.reason, .card, .whom-grid .item, .philo-img, .philo-quote, .gift-photo, .help-card, .contact-form, .process-cta').forEach(function (el) {
-        reveal(el, { y: 24, duration: 0.7 }, el, 'top 80%');
+      // ----- Sections: clearly visible but light entrance reveals (transform / opacity / clip only) -----
+      var START = 'top 88%';
+      // Section titles: the pink line draws in, then the title and its text rise in
+      ['.about-text', '.s-why .sec-head', '.s-services .sec-head', '.process-aside', '.whom-head', '.testi-head', '.faq-head', '.gift-text', '.contact-info', '.philo-quote'].forEach(function (s) {
+        var box = $(s); if (!box) return;
+        var trig = getComputedStyle(box).display === 'contents' ? box.firstElementChild : box; // .faq-head is display:contents on mobile
+        var line = $('.overline i', box);
+        if (line) gsap.from(line, { scaleX: 0, transformOrigin: '100% 50%', duration: 0.9, ease: 'power3.out', clearProps: 'transform', scrollTrigger: { trigger: trig, start: START, once: true } });
+        reveal($$(':scope > :not(.mosaic):not(.help-card):not(.stats):not(.about-cta):not(.gift-facts):not(.btn):not(.details)', box), { y: 46, duration: 1, stagger: 0.1 }, trig, START);
       });
-      reveal('.accordion .faq', { y: 14, duration: 0.5, stagger: 0.05 }, '.accordion', 'top 85%');
-      reveal('.testi-list', { x: -30, y: 0, duration: 0.8 }, '.testi-list', 'top 85%');
+      // Images: wipe up from the bottom with a gentle zoom-out
+      $$('.m-room, .m-oils, .m-stones, .card-media, .philo-img > img, .gift-photo, .help-media').forEach(function (el, i) {
+        var img = el.tagName === 'IMG' ? el : $('img', el);
+        var tl = gsap.timeline({ scrollTrigger: { trigger: el, start: START, once: true } });
+        tl.fromTo(el, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.15, ease: 'power3.inOut', clearProps: 'clipPath' }, el.classList.contains('m-oils') || el.classList.contains('m-stones') ? 0.15 : 0);
+        if (img && el !== img) tl.from(mark(img), { scale: 1.25, duration: 1.5, ease: 'power2.out', clearProps: 'transform' }, '<');
+        if (el === img) tl.from(mark(img), { scale: 1.12, duration: 1.5, ease: 'power2.out', clearProps: 'transform' }, '<');
+      });
+      reveal('.mosaic .caption, .about-badge', { y: 0, scale: 0.6, duration: 0.9, ease: 'back.out(1.8)', stagger: 0.15, delay: 0.6 }, '.mosaic', START);
+      // Cards: rise and settle with a soft bounce, cascading
+      ['.reasons', '.cards', '.whom-grid'].forEach(function (g) {
+        reveal($$(':scope > .reason, :scope > .card, :scope > .item', $(g)), { y: 60, scale: 0.94, duration: 1, ease: 'back.out(1.4)', stagger: 0.12 }, g, START);
+      });
+      reveal('.stat, .stat-div', { y: 30, duration: 0.8, stagger: 0.12 }, '.stats', START);
+      reveal('.about-cta > *', { y: 30, duration: 0.8, stagger: 0.12 }, '.about-cta', START);
+      reveal('.step', { x: 60, y: 0, duration: 0.9, stagger: 0.15 }, '.timeline', START);
+      reveal('.process-cta', { y: 30, scale: 0.9, duration: 0.8, ease: 'back.out(1.6)' }, '.process-cta', 'top 95%');
+      reveal('.testi-list', { x: -80, y: 0, duration: 1.1 }, '.testi-list', START);
+      reveal('.gift-facts li, .gift-text .btn', { x: 30, y: 0, duration: 0.7, stagger: 0.1 }, '.gift-facts', START);
+      reveal('.accordion .faq', { y: 30, duration: 0.7, stagger: 0.08 }, '.accordion', START);
+      reveal('.help-card', { y: 50, duration: 1 }, '.help-card', START);
+      reveal('.details li', { x: 40, y: 0, duration: 0.7, stagger: 0.08 }, '.details', START);
+      reveal('.contact-form', { y: 60, duration: 1 }, '.contact-form', START);
+      reveal('.contact-badge', { y: 0, scale: 0.6, rotate: -30, duration: 1.1, ease: 'back.out(1.6)' }, '.contact-badge', 'top 95%');
+      reveal('.f-cols > :not(.f-gap), .f-legal', { y: 30, duration: 0.8, stagger: 0.1 }, '.s-footer', 'top 92%');
 
       // ----- Process: line revealed with the scroll; the step crossing mid-screen is in focus -----
       gsap.fromTo('.tl-line.m-only', { clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)', ease: 'none', scrollTrigger: { trigger: '.timeline', start: 'top 65%', end: 'bottom 55%', scrub: 0.6 } });
