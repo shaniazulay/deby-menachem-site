@@ -15,6 +15,8 @@
 
   function fitSections() {
     var sections = document.querySelectorAll('main > section:not(.s-marquee), .s-footer');
+    // Measure the resting layout: neutralise GSAP entrance offsets (elements marked .gs) while measuring.
+    document.documentElement.classList.add('is-measuring');
     sections.forEach(function (sec) {
       var frame = sec.querySelector('.frame');
       sec.style.height = ''; frame.style.transform = ''; frame.style.transformOrigin = '';
@@ -52,7 +54,10 @@
       frame.style.transform = 'scale(' + k + ') translateY(' + (-trimTop) + 'px)';
       sec.style.height = (contentH * k) + 'px';
     });
+    document.documentElement.classList.remove('is-measuring');
+    if (window.ScrollTrigger) window.ScrollTrigger.refresh();
   }
+  window.DebyFitSections = fitSections;
   var fitTimer;
   function scheduleFit() { clearTimeout(fitTimer); fitTimer = setTimeout(fitSections, 60); }
   window.addEventListener('resize', scheduleFit);
@@ -77,9 +82,9 @@
     });
   }
 
-  // ---------- FAQ: one open item at a time ----------
+  // ---------- FAQ: one open item at a time (animated version lives in animations.js) ----------
   var faqs = document.querySelectorAll('.accordion .faq');
-  faqs.forEach(function (d) {
+  if (!window.gsap) faqs.forEach(function (d) {
     d.addEventListener('toggle', function () {
       if (!d.open) return;
       faqs.forEach(function (o) { if (o !== d) o.open = false; });
