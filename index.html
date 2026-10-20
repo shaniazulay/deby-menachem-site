@@ -27,7 +27,7 @@
         // Hero height factor: hero (720px) + the words strip below it (128px) fit in the first screen.
         var hk = Math.max(0.5, Math.min(1, (window.innerHeight - 128 * z) / (720 * z)));
         r.style.setProperty('--hk', hk);
-        r.style.setProperty('--hg', Math.max(0, (r.clientWidth / (z * hk) - 1440) / 2) + 'px');
+        r.style.setProperty('--hg', Math.max(0, r.clientWidth / (z * hk) - 1440) + 'px');
       }
       // Re-measure once the scrollbar exists (clientWidth excludes it).
       fit(); window.addEventListener('resize', fit);
