@@ -16,7 +16,9 @@
   if (/[?&]static/.test(location.search)) return; // ?static – motion off (used by the layout/pixel tests)
 
   var gsap = window.gsap, ScrollTrigger = window.ScrollTrigger;
-  gsap.registerPlugin(ScrollTrigger);
+  // GSAP 3.13 – SplitText, DrawSVG and ScrollSmoother are free; each is optional (feature-detected).
+  var SplitText = window.SplitText, DrawSVGPlugin = window.DrawSVGPlugin, ScrollSmoother = window.ScrollSmoother;
+  gsap.registerPlugin.apply(gsap, [ScrollTrigger, SplitText, DrawSVGPlugin, ScrollSmoother].filter(Boolean));
   root.classList.add('gsap-on');
 
   var DESKTOP = '(min-width: 1100px)';
@@ -34,7 +36,8 @@
 
   // Scroll-in reveal (plays once). clearProps hands the element back to CSS (hover states etc.).
   function reveal(targets, vars, trigger, start) {
-    var els = $$(targets);
+    // Headlines split into words ([data-split]) get their own word-by-word animation.
+    var els = $$(targets).filter(function (el) { return !el.hasAttribute('data-split'); });
     if (!els.length) return null;
     mark(els);
     return gsap.from(els, Object.assign({
@@ -45,6 +48,24 @@
   }
 
   // ---------- one-time DOM prep (shared by all branches) ----------
+  // Section headlines that will be written word by word (marked now, split once fonts are ready).
+  var HEADS = '.about-text h2, .sec-head h2, .process-aside h2, .whom-head h2, .testi-head h2, .faq-head h2, .gift-text h2, .contact-info h2';
+  if (SplitText) $$(HEADS).forEach(function (h) { h.setAttribute('data-split', ''); });
+
+  // Dotted squiggles: inline the SVG files so their paths can be drawn with DrawSVG.
+  var inlined = Promise.all($$('img.about-squiggle, img.contact-squiggle, img.contact-squiggle-m').map(function (img) {
+    return fetch(img.getAttribute('src')).then(function (r) { return r.text(); }).then(function (txt) {
+      var holder = document.createElement('div');
+      holder.innerHTML = txt.trim();
+      var svg = holder.querySelector('svg');
+      if (!svg || !img.parentNode) return;
+      svg.setAttribute('class', img.getAttribute('class'));
+      svg.setAttribute('aria-hidden', 'true');
+      svg.removeAttribute('style');
+      img.parentNode.replaceChild(svg, img);
+    }).catch(function () {});
+  }));
+
   var h1 = $('.hero-text h1');
   if (h1 && !h1.querySelector('.h1-line')) {
     h1.innerHTML = h1.innerHTML.split(/<br\s*\/?>/i).map(function (t) { return '<span class="h1-line">' + t.trim() + '</span>'; }).join('');
@@ -124,6 +145,24 @@
       return function () { cleanups.forEach(function (fn) { fn(); }); };
     }
 
+    // ===== Desktop smooth scrolling (ScrollSmoother) – created first, before the other triggers =====
+    if (c.isDesktop && ScrollSmoother) {
+      var smoother = ScrollSmoother.create({ wrapper: '#smooth-wrapper', content: '#smooth-content', smooth: 1.1, smoothTouch: false, effects: false });
+      root.classList.add('has-smoother');
+      // In-page links scroll through the smoother (native anchor jumps don't know about it)
+      var onAnchor = function (e) {
+        var a = e.target.closest('a[href^="#"]');
+        if (!a) return;
+        var id = a.getAttribute('href');
+        var target = id.length > 1 && document.querySelector(id);
+        if (!target) return;
+        e.preventDefault();
+        smoother.scrollTo(target, true, 'top 70px');
+      };
+      document.addEventListener('click', onAnchor);
+      cleanups.push(function () { document.removeEventListener('click', onAnchor); smoother.kill(); root.classList.remove('has-smoother'); });
+    }
+
     // ===== Marquee ticker – seamless loop with transforms only =====
     var track = $('.marquee-track');
     var ticker = gsap.fromTo(track, { xPercent: -33.3333 }, { xPercent: 0, duration: c.isDesktop ? 46 : 26, ease: 'none', repeat: -1 });
@@ -149,7 +188,8 @@
         .from(mark('.hero-text .h1-line'), { y: 30, opacity: 0, duration: 0.9, stagger: 0.15 }, 0.35)
         .from(mark(['.hero-text .lead', '.hero-buttons', '.trust', '.info-strip']), { y: 20, opacity: 0, duration: 0.8, stagger: 0.1, clearProps: 'transform,opacity' }, 0.7)
         .from(mark(['.hero-caption', '.vlabel > *']), { opacity: 0, duration: 1 }, 0.8)
-        .from(mark('.hero-badge.d-only'), { scale: 0.85, opacity: 0, duration: 1.1, ease: 'back.out(1.6)' }, 0.6);
+        .from(mark('.hero-badge.d-only'), { scale: 0.85, opacity: 0, duration: 1.1, ease: 'back.out(1.6)' }, 0.6)
+        .from(mark('.avatars .av'), { scale: 0, duration: 0.55, ease: 'back.out(2.2)', stagger: 0.12, clearProps: 'transform' }, 1.05);
 
       // Image parallax (the 1.12 scale gives the head-room for the 6% drift)
       gsap.to(heroImg, { yPercent: 6, ease: 'none', scrollTrigger: { trigger: '.s-hero', start: 'top top', end: 'bottom top', scrub: 1.2 } });
@@ -190,7 +230,14 @@
       gsap.set(['.m-room img', '.m-oils img'], { scale: 1.2 });
       gsap.fromTo('.m-room img', { yPercent: 8 }, { yPercent: -8, ease: 'none', scrollTrigger: { trigger: '.s-about', start: 'top bottom', end: 'bottom top', scrub: 1 } });
       gsap.fromTo('.m-oils img', { yPercent: -8 }, { yPercent: 8, ease: 'none', scrollTrigger: { trigger: '.s-about', start: 'top bottom', end: 'bottom top', scrub: 1 } });
-      gsap.fromTo('.about-squiggle', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 2.2, ease: 'power2.inOut', scrollTrigger: { trigger: '.s-about', start: 'top 75%', once: true } });
+      drawOnEnter('.about-squiggle', '.s-about', 2.4);
+      drawOnEnter('.contact-squiggle', '.contact-card', 2.2);
+
+      // Grid lines of "For whom" extend from their centres, then the pink dots light up at the crossings
+      var gtl = gsap.timeline({ scrollTrigger: { trigger: '.whom-grid', start: 'top 75%', once: true } });
+      gtl.from(mark('.g-v1, .g-v2, .g-v3, .g-v4'), { scaleY: 0, transformOrigin: '50% 50%', duration: 1.1, ease: 'power3.inOut', stagger: 0.1, clearProps: 'transform' })
+        .from(mark('.g-h1'), { scaleX: 0, transformOrigin: '50% 50%', duration: 1.1, ease: 'power3.inOut', clearProps: 'transform' }, 0.1)
+        .from(mark('.g-dot'), { scale: 0, duration: 0.6, ease: 'back.out(3)', stagger: 0.15, clearProps: 'transform' }, 0.85);
       reveal('.about-text > :not(.mosaic)', { stagger: 0.08 }, '.about-text');
       reveal('.mosaic > div:not(.caption)', { y: 40, stagger: 0.12, duration: 1.1 }, '.mosaic');
       reveal(['.mosaic .caption', '.about-badge'], { y: 0, scale: 0.9, stagger: 0.15, delay: 0.4 }, '.mosaic');
@@ -284,6 +331,64 @@
       // ----- Process: line revealed with the scroll; the step crossing mid-screen is in focus -----
       gsap.fromTo('.tl-line.m-only', { clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)', ease: 'none', scrollTrigger: { trigger: '.timeline', start: 'top 65%', end: 'bottom 55%', scrub: 0.6 } });
       timelineSteps('top 55%', 'bottom 45%');
+    }
+
+    if (c.isMobile) drawOnEnter('.contact-squiggle-m', '.contact-squiggle-m', 1.8);
+
+    // ===== Shared (desktop + mobile) =====
+    // Headlines written word by word: soft blur → sharp
+    if (SplitText) {
+      var splits = [];
+      document.fonts.ready.then(function () {
+        ctx.add(function () {
+          $$(HEADS).forEach(function (h) {
+            if (h.offsetParent === null) return;
+            var st = SplitText.create(h, { type: 'words', wordsClass: 'split-word' });
+            splits.push(st);
+            gsap.from(mark(st.words), { opacity: 0, y: 26, filter: 'blur(8px)', duration: 0.95, ease: 'power3.out', stagger: 0.07,
+              clearProps: 'filter,transform,opacity', scrollTrigger: { trigger: h, start: 'top 88%', once: true } });
+          });
+          refreshLayout();
+        });
+      });
+      cleanups.push(function () { splits.forEach(function (s) { s.revert(); }); });
+    }
+
+    // Breathing icons (a calm 2–3% inhale/exhale, out of sync)
+    gsap.to(mark('.ring-icon, .w-icon'), { scale: 1.035, duration: 2.8, yoyo: true, repeat: -1, ease: 'sine.inOut', stagger: { each: 0.55, from: 'random' } });
+
+    // Waves between sections breathe slowly
+    gsap.to(mark('.wave-top'), { scaleY: 1.18, transformOrigin: '50% 0%', duration: 5, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+    gsap.to(mark('.wave-bottom'), { scaleY: 1.18, transformOrigin: '50% 100%', duration: 5.6, yoyo: true, repeat: -1, ease: 'sine.inOut', delay: 1 });
+
+    // Gift voucher: slow Ken Burns on the photo (logo + text ride along), then the logo is "stamped" on the card
+    gsap.fromTo('.gift-zoom', { scale: 1.12 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '.gift-photo', start: 'top bottom', end: 'bottom top', scrub: 1 } });
+    var vtl = gsap.timeline({ scrollTrigger: { trigger: '.gift-photo', start: 'top 65%', once: true } });
+    vtl.fromTo('.voucher-logo', { xPercent: -50, yPercent: -50, rotation: -8.4, scale: 1.45, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: 'power4.in' })
+      .to('.voucher-logo', { scale: 1.04, duration: 0.12, yoyo: true, repeat: 1, ease: 'power1.out' })
+      .fromTo('.voucher-text', { xPercent: -50, yPercent: -50, rotation: -8.4, scale: 1.45, opacity: 0 }, { scale: 1, opacity: 0.9, duration: 0.45, ease: 'power4.in' }, '-=0.05')
+      .set(['.voucher-logo', '.voucher-text'], { clearProps: 'transform,opacity' });
+
+    // Testimonial stars fill in one by one
+    gsap.from(mark('.testi .stars img'), { scale: 0, rotate: -40, opacity: 0, duration: 0.5, ease: 'back.out(2.5)', stagger: 0.06, delay: 0.3,
+      clearProps: 'transform,opacity', scrollTrigger: { trigger: '.testi-list', start: 'top 80%', once: true } });
+
+    // Lotus at the end of the timeline blooms
+    gsap.from(mark('.tl-lotus'), { scale: 0, rotate: -60, opacity: 0, duration: 1, ease: 'back.out(2)', clearProps: 'transform,opacity',
+      scrollTrigger: { trigger: '.tl-lotus', start: 'top 85%', once: true } });
+
+    // Dotted squiggle drawn along its path (DrawSVG) once its section arrives
+    function drawOnEnter(sel, trigger, dur) {
+      if (!DrawSVGPlugin) return;
+      inlined.then(function () {
+        ctx.add(function () {
+          var svg = $(sel);
+          if (!svg || svg.tagName.toLowerCase() !== 'svg') return;
+          var shapes = $$('path, circle', svg);
+          gsap.fromTo(shapes, { drawSVG: '0%' }, { drawSVG: '100%', duration: dur, ease: 'power2.inOut', stagger: 0.05,
+            scrollTrigger: { trigger: trigger, start: 'top 75%', once: true } });
+        });
+      });
     }
 
     // Shared: process steps highlight + node light-up

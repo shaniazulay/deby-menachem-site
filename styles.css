@@ -846,3 +846,50 @@ h2 { font-family: var(--serif); font-weight: 400; line-height: 1.1; color: var(-
   /* Side slide-in reveals must never widen the page */
   main > section, .s-footer { overflow-x: clip; }
 }
+
+/* =========================================================
+   MOTION – round 2
+   ========================================================= */
+.gift-zoom { position: absolute; inset: 0; }
+html.has-smoother { scroll-behavior: auto; }
+.split-word { display: inline-block; }
+
+/* Form: floating labels + pink border that fills in from the right on focus */
+.field { position: relative; }
+.field .fl { position: absolute; right: 21px; top: 50%; transform: translateY(-50%); font: 400 18px/1.2 var(--sans); color: var(--muted); pointer-events: none; transition: top .3s ease, transform .3s ease, font-size .3s ease, color .3s ease; }
+.field.area .fl { top: 19px; transform: none; }
+.field input::placeholder, .field textarea::placeholder { color: transparent; }
+.field input { padding-top: 16px; }
+.field textarea { padding-top: 28px; }
+.field:focus-within .fl, .field:has(input:not(:placeholder-shown)) .fl, .field:has(textarea:not(:placeholder-shown)) .fl { top: 8px; transform: none; font-size: 12px; color: var(--sage); }
+.field::after { content: ''; position: absolute; inset: 0; border: 1.5px solid var(--pink); border-radius: 14px; pointer-events: none; clip-path: inset(0 0 0 100%); transition: clip-path .55s cubic-bezier(.6, 0, .2, 1); }
+.field:focus-within::after { clip-path: inset(0 0 0 0); }
+.field:focus-within input, .field:focus-within select, .field:focus-within textarea { border-color: transparent; }
+
+/* Checkbox: the tick draws in with a bounce */
+.consent input { transition: background-color .25s, border-color .25s; }
+.consent input::after { content: ''; width: 9px; height: 5px; border: solid #fff; border-width: 0 0 2px 2px; transform: translateY(-1px) rotate(-45deg) scale(0); transition: transform .3s cubic-bezier(.3, 1.6, .5, 1); }
+.consent input:checked::after { transform: translateY(-1px) rotate(-45deg) scale(1); }
+
+/* Hamburger lines → ✕ */
+.hb { position: relative; display: block; width: 20px; height: 14px; }
+.hb i { position: absolute; right: 1px; height: 1.5px; border-radius: 2px; background: var(--ink); transition: transform .35s ease, opacity .25s ease, width .35s ease, top .35s ease; }
+.hb i:nth-child(1) { top: 0.25px; width: 18px; }
+.hb i:nth-child(2) { top: 6.25px; width: 14px; }
+.hb i:nth-child(3) { top: 12.25px; width: 10px; }
+.hamburger[aria-expanded="true"] .hb i:nth-child(1) { top: 6.25px; width: 18px; transform: rotate(45deg); }
+.hamburger[aria-expanded="true"] .hb i:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger[aria-expanded="true"] .hb i:nth-child(3) { top: 6.25px; width: 18px; transform: rotate(-45deg); }
+
+/* Back-to-top lifts */
+.to-top { transition: transform .3s cubic-bezier(.3, 1.6, .5, 1), box-shadow .3s; }
+.to-top:hover, .to-top:active { transform: translateY(-4px); box-shadow: 0 10px 22px rgba(30, 30, 30, 0.12); }
+
+/* Pink "jewel" dots next to the For-whom icons glow softly, out of sync */
+@keyframes jewel-glow { 0%, 100% { filter: none; } 50% { filter: drop-shadow(0 0 5px rgba(201, 151, 155, 0.95)); } }
+.gsap-on .w-icon::after { animation: jewel-glow 3.6s ease-in-out infinite; }
+.gsap-on .item:nth-child(2) .w-icon::after { animation-delay: .6s; }
+.gsap-on .item:nth-child(3) .w-icon::after { animation-delay: 1.2s; }
+.gsap-on .item:nth-child(4) .w-icon::after { animation-delay: 1.8s; }
+.gsap-on .item:nth-child(5) .w-icon::after { animation-delay: 2.4s; }
+.gsap-on .item:nth-child(6) .w-icon::after { animation-delay: 3s; }

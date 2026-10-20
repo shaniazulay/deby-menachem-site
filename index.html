@@ -34,11 +34,13 @@
       document.addEventListener('DOMContentLoaded', fit); window.addEventListener('load', fit);
     })();
   </script>
-  <link rel="stylesheet" href="styles.css?v=202610202112">
+  <link rel="stylesheet" href="styles.css?v=202610202136">
 </head>
 <body>
 <a class="skip" href="#main">דילוג לתוכן</a>
 
+<div id="smooth-wrapper">
+<div id="smooth-content">
 <div class="page">
 
 <!-- ============ 01 · HERO ============ -->
@@ -57,7 +59,7 @@
       <div class="header-actions">
         <a class="header-cta" href="#contact">שנדבר?</a>
         <button class="hamburger m-only" type="button" aria-label="פתיחת תפריט" aria-expanded="false" aria-controls="site-nav">
-          <img src="assets/icon-menu.svg" width="20" height="14" alt="">
+          <span class="hb" aria-hidden="true"><i></i><i></i><i></i></span>
         </button>
       </div>
     </div>
@@ -340,9 +342,11 @@
     <div class="gift-panel">
       <i class="inset-rule" aria-hidden="true"></i>
       <div class="gift-photo">
-        <img class="gift-bg" src="assets/img/gift.webp" alt="שובר מתנה של דבי מנחם עטוף בסרט ורוד על בד פשתן" loading="lazy">
-        <div class="voucher-logo" aria-hidden="true"><img src="assets/img/logo.webp" alt=""></div>
-        <div class="voucher-text" aria-hidden="true">שובר מתנה</div>
+        <div class="gift-zoom">
+          <img class="gift-bg" src="assets/img/gift.webp" alt="שובר מתנה של דבי מנחם עטוף בסרט ורוד על בד פשתן" loading="lazy">
+          <div class="voucher-logo" aria-hidden="true"><img src="assets/img/logo.webp" alt=""></div>
+          <div class="voucher-text" aria-hidden="true">שובר מתנה</div>
+        </div>
         <div class="caption"><i></i><span>שובר דיגיטלי או מודפס</span></div>
       </div>
       <div class="gift-text">
@@ -432,8 +436,8 @@
       <form class="contact-form" id="contact-form" novalidate>
         <h3>השאירי פרטים ואחזור אלייך</h3>
         <div class="row">
-          <label class="field"><span class="sr-only">טלפון</span><input type="tel" name="phone" placeholder="טלפון" autocomplete="tel" required></label>
-          <label class="field"><span class="sr-only">שם מלא</span><input type="text" name="name" placeholder="שם מלא" autocomplete="name" required></label>
+          <label class="field"><span class="fl">טלפון</span><input type="tel" name="phone" placeholder="טלפון" autocomplete="tel" required></label>
+          <label class="field"><span class="fl">שם מלא</span><input type="text" name="name" placeholder="שם מלא" autocomplete="name" required></label>
         </div>
         <label class="field select"><span class="sr-only">סוג הטיפול</span>
           <select name="treatment">
@@ -446,7 +450,7 @@
             <option>עוד לא בטוחה</option>
           </select>
         </label>
-        <label class="field area"><span class="sr-only">הודעה</span><textarea name="message" placeholder="הודעה (לא חובה)"></textarea></label>
+        <label class="field area"><span class="fl">הודעה (לא חובה)</span><textarea name="message" placeholder="הודעה (לא חובה)"></textarea></label>
         <label class="consent"><input type="checkbox" name="consent"><span>אני מאשרת קבלת עדכונים ותוכן שיווקי במייל</span></label>
         <button class="btn btn-cta wide" type="submit"><span>אני רוצה לקבוע טיפול</span><i class="ic"><img src="assets/icon-arrow.svg" alt=""></i></button>
         <p class="form-note" role="status">הפרטים שלך נשמרים אצלי בלבד ולא יועברו לאף גורם.</p>
@@ -505,12 +509,17 @@
 </footer>
 
 </div>
+</div><!-- /#smooth-content -->
+</div><!-- /#smooth-wrapper -->
 
 <a class="float-wa m-only" href="https://wa.me/972584502900" target="_blank" rel="noopener" aria-label="שליחת הודעה בוואטסאפ"><img src="assets/icon-whatsapp.svg" alt=""></a>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-<script src="main.js?v=202610202112" defer></script>
-<script src="animations.js?v=202610202112" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/DrawSVGPlugin.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollSmoother.min.js" defer></script>
+<script src="main.js?v=202610202136" defer></script>
+<script src="animations.js?v=202610202136" defer></script>
 </body>
 </html>
