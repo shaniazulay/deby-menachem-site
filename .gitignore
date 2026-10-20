@@ -1,0 +1,7 @@
+node_modules/
+.pixel-perfect/
+design-src/
+.vercel/
+.DS_Store
+Thumbs.db
+.claude/

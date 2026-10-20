@@ -1,0 +1,11 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="icon">
+<circle id="Ellipse" cx="48" cy="48" r="48" fill="#EEF1EC"/>
+<g id="icon / &#215;&#155;&#215;&#144;&#215;&#145;&#215;&#153; &#215;&#158;&#215;&#151;&#215;&#150;&#215;&#149;&#215;&#168;">
+<path id="Vector" d="M36.5 33.625H59.5C62.6756 33.625 65.25 36.1994 65.25 39.375V59.5C65.25 62.6756 62.6756 65.25 59.5 65.25H36.5C33.3244 65.25 30.75 62.6756 30.75 59.5V39.375C30.75 36.1994 33.3244 33.625 36.5 33.625Z" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" stroke="#6B7A69"/>
+<path id="Vector_2" d="M40.3333 29.7917V37.4583M55.6667 29.7917V37.4583" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" stroke="#6B7A69"/>
+<path id="Vector_3" d="M48.0001 44.1667C51.4501 48.3833 53.1751 51.0667 53.1751 53.3667C53.1751 54.7392 52.6299 56.0554 51.6594 57.0259C50.6889 57.9964 49.3726 58.5417 48.0001 58.5417C46.6276 58.5417 45.3113 57.9964 44.3408 57.0259C43.3703 56.0554 42.8251 54.7392 42.8251 53.3667C42.8251 51.0667 44.5501 48.3833 48.0001 44.1667Z" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" stroke="#6B7A69"/>
+</g>
+<path id="Ellipse_2" d="M88 14C88 17.3137 85.3137 20 82 20C78.6863 20 76 17.3137 76 14C76 10.6863 78.6863 8 82 8C85.3137 8 88 10.6863 88 14Z" fill="#C9979B" stroke-width="3" stroke="white"/>
+</g>
+</svg>
