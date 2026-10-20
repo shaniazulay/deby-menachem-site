@@ -771,7 +771,7 @@ h2 { font-family: var(--serif); font-weight: 400; line-height: 1.1; color: var(-
    of the buttons above it and of the floating WhatsApp button beside it. */
 @media (max-width: 1099.98px) {
   .s-hero, .hero-visual { overflow-x: clip; overflow-y: visible; }
-  .hero-badge { width: 115.92px; height: 115.92px; right: auto; left: 76px; top: auto; bottom: -57.96px; z-index: 5; } /* original Figma size; centred on the photo edge: half on the photo, half below */
-  .hero-text { bottom: 84px; }
+  .hero-badge { width: 115.92px; height: 115.92px; right: auto; left: 76px; top: auto; bottom: -20px; z-index: 5; } /* original Figma size; dips 20px below the photo – above the moving words (they start 23px into the strip) */
+  .hero-text { bottom: 106px; } /* buttons stay above the badge */
   .info-strip { left: 200px; } /* starts right of the badge (76 + 116 + 8) */
 }
