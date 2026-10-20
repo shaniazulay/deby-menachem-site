@@ -7,7 +7,7 @@
      the mobile layout (the spec's 992px would put desktop parallax on the 992–1099 mobile layout).
    • Desktop: depth (parallax), cursor micro-interactions, floating elements.
    • Mobile: fast, transform/opacity-only entrance reveals; no parallax; tap feedback in CSS.
-   • prefers-reduced-motion: no movement – content is shown immediately, only a minimal hero fade.
+   • prefers-reduced-motion: ignored by owner decision (RESPECT_REDUCED_MOTION below); when enabled → fades only.
    ========================================================= */
 (function () {
   'use strict';
@@ -21,7 +21,10 @@
 
   var DESKTOP = '(min-width: 1100px)';
   var MOBILE = '(max-width: 1099.98px)';
-  var REDUCE = '(prefers-reduced-motion: reduce)';
+  // Owner decision: the full motion experience always runs, even when the device asks for reduced motion.
+  // To respect that setting again, set RESPECT_REDUCED_MOTION = true.
+  var RESPECT_REDUCED_MOTION = false;
+  var REDUCE = RESPECT_REDUCED_MOTION ? '(prefers-reduced-motion: reduce)' : 'not all';
   var $ = function (s, ctx) { return (ctx || document).querySelector(s); };
   var $$ = function (s, ctx) { return gsap.utils.toArray(s, ctx); };
 
