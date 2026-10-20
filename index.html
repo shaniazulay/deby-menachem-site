@@ -24,8 +24,8 @@
       function fit() {
         var z = Math.min(1, window.innerWidth / 1440);
         r.style.setProperty('--z', z);
-        // Hero height factor: fit the 720px hero inside the visible screen height.
-        r.style.setProperty('--hk', Math.max(0.6, Math.min(1, window.innerHeight / (720 * z))));
+        // Hero height factor: hero (720px) + the words strip below it (128px) fit in the first screen.
+        r.style.setProperty('--hk', Math.max(0.5, Math.min(1, (window.innerHeight - 128 * z) / (720 * z))));
       }
       fit(); window.addEventListener('resize', fit);
     })();
