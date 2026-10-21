@@ -934,3 +934,18 @@ html.loader-out .loader { clip-path: inset(0 0 100% 0 round 0 0 50% 50%); transi
   .loader-mark { width: 96px; height: 96px; }
   .loader-lotus { width: 44px; height: 44px; }
 }
+
+/* Gift panel – fine print dots texture (option E): dense in a corner, fading toward the centre.
+   Desktop: bottom-right corner (behind the text column). Mobile: bottom-left corner. */
+.gift-panel::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14'%3E%3Ccircle cx='3' cy='3' r='1.3' fill='%23fff' fill-opacity='.3'/%3E%3Ccircle cx='10' cy='10' r='1.3' fill='%23fff' fill-opacity='.3'/%3E%3C/svg%3E");
+  -webkit-mask: radial-gradient(85% 100% at 100% 100%, #000 0%, transparent 80%);
+  mask: radial-gradient(85% 100% at 100% 100%, #000 0%, transparent 80%);
+}
+@media (max-width: 1099.98px) {
+  .gift-panel::before {
+    -webkit-mask: radial-gradient(95% 70% at 0% 100%, #000 0%, transparent 80%);
+    mask: radial-gradient(95% 70% at 0% 100%, #000 0%, transparent 80%);
+  }
+}
