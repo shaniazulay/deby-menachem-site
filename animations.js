@@ -13,7 +13,7 @@
   'use strict';
   var root = document.documentElement;
   if (!window.gsap || !window.ScrollTrigger) return; // site works fully without the motion layer
-  if (/[?&]static/.test(location.search)) return; // ?static – motion off (used by the layout/pixel tests)
+  if (/[?&]static(&|$)/.test(location.search)) return; // ?static – motion off (used by the layout/pixel tests)
 
   var gsap = window.gsap, ScrollTrigger = window.ScrollTrigger;
   // GSAP 3.13 – SplitText, DrawSVG and ScrollSmoother are free; each is optional (feature-detected).
