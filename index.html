@@ -37,8 +37,7 @@
       // (it no longer waits for every image further down the page).
       // "deby:ready" fires as the curtain lifts, so the hero entrance plays right behind it.
       if (!/[?&]static/.test(location.search)) r.classList.add('is-loading'); else done = true;
-      // timings are measured from the start of navigation (performance.now), not from when this script ran
-      var since = function () { return window.performance ? performance.now() : 0; };
+      var t0 = Date.now();
       function closeLoader() {
         if (done) return; done = true;
         r.classList.add('loader-out');
@@ -50,11 +49,11 @@
       }
       function whenReady() {
         var img = document.querySelector('.hero-img img');
-        var go = function () { setTimeout(closeLoader, Math.max(0, 3000 - since())); };
+        var go = function () { setTimeout(closeLoader, Math.max(0, 3000 - (Date.now() - t0))); };
         if (!img || img.complete) go(); else { img.addEventListener('load', go); img.addEventListener('error', go); }
       }
       document.addEventListener('DOMContentLoaded', whenReady);
-      setTimeout(closeLoader, Math.max(0, 4500 - since())); // safety net on very slow networks
+      setTimeout(closeLoader, 5000); // safety net on very slow networks
       document.addEventListener('DOMContentLoaded', fit); window.addEventListener('load', fit);
     })();
   </script>
