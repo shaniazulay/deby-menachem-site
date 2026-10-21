@@ -33,7 +33,7 @@
   var style = document.createElement('style');
   style.textContent =
     '.fx-hero-grad, .fx-seam { position: absolute; left: 0; right: 0; pointer-events: none; opacity: 0; }' +
-    '.fx-hero-grad { top: 0; bottom: 0; z-index: 1; }' +
+    '.fx-hero-grad { top: 0; bottom: 0; }' +
     '.fx-seam { top: -1px; height: min(60%, 560px); z-index: 4; border-radius: inherit; }';
   document.head.appendChild(style);
 
