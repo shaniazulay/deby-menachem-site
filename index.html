@@ -44,14 +44,14 @@
         setTimeout(function () {
           r.classList.remove('is-loading', 'loader-out');
           var l = document.getElementById('loader'); if (l) l.remove();
-        }, 1500);
+        }, 2100); // after the dissolve (1.55s) and the hero settle (1.9s)
       }
       window.addEventListener('load', function () { setTimeout(closeLoader, Math.max(0, 3400 - (Date.now() - t0))); });
       setTimeout(closeLoader, 8000); // safety net on very slow networks
       document.addEventListener('DOMContentLoaded', fit); window.addEventListener('load', fit);
     })();
   </script>
-  <link rel="stylesheet" href="styles.css?v=202610211242">
+  <link rel="stylesheet" href="styles.css?v=202610211249">
 </head>
 <body>
 <!-- Luxury preloader (pure CSS animation, closed by the inline script in <head> once the page has loaded) -->
