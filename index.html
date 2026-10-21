@@ -33,8 +33,7 @@
       fit(); window.addEventListener('resize', fit);
 
       var done = false;
-      // Preloader: shown for at least 3s (logo animation), closed once the page structure + hero photo are ready
-      // (it no longer waits for every image further down the page).
+      // Preloader: shown for at least 3.4s (so the logo animation completes), closed when the page has loaded.
       // "deby:ready" fires as the curtain lifts, so the hero entrance plays right behind it.
       if (!/[?&]static/.test(location.search)) r.classList.add('is-loading'); else done = true;
       var t0 = Date.now();
@@ -47,17 +46,12 @@
           var l = document.getElementById('loader'); if (l) l.remove();
         }, 2100); // after the dissolve (1.55s) and the hero settle (1.9s)
       }
-      function whenReady() {
-        var img = document.querySelector('.hero-img img');
-        var go = function () { setTimeout(closeLoader, Math.max(0, 3000 - (Date.now() - t0))); };
-        if (!img || img.complete) go(); else { img.addEventListener('load', go); img.addEventListener('error', go); }
-      }
-      document.addEventListener('DOMContentLoaded', whenReady);
-      setTimeout(closeLoader, 5000); // safety net on very slow networks
+      window.addEventListener('load', function () { setTimeout(closeLoader, Math.max(0, 3400 - (Date.now() - t0))); });
+      setTimeout(closeLoader, 8000); // safety net on very slow networks
       document.addEventListener('DOMContentLoaded', fit); window.addEventListener('load', fit);
     })();
   </script>
-  <link rel="stylesheet" href="styles.css?v=202610211259">
+  <link rel="stylesheet" href="styles.css?v=202610211249">
 </head>
 <body>
 <!-- Luxury preloader (pure CSS animation, closed by the inline script in <head> once the page has loaded) -->
