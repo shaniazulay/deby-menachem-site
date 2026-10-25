@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /marketing/
+Disallow: /scripts/
+
+Sitemap: https://shaniazulay.github.io/deby-menachem-site/sitemap.xml
